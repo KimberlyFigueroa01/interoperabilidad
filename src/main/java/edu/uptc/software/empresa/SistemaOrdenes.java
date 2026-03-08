@@ -6,6 +6,9 @@ import edu.uptc.software.proveedor.User;
 public class SistemaOrdenes {
     private PaymentProvider paymentProvider;
 
+    public SistemaOrdenes() {
+    }
+
     public SistemaOrdenes(PaymentProvider paymentProvider) {
         this.paymentProvider = paymentProvider;
     }
@@ -15,6 +18,7 @@ public class SistemaOrdenes {
         paymentProvider.executeTransaction(user, monto, moneda);
     }
 
+    
 
     
 }

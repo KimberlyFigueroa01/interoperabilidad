@@ -1,9 +1,12 @@
 package edu.uptc.software.proveedor;
 
+import java.io.File;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PaymentProvider {
     
@@ -22,7 +25,20 @@ public class PaymentProvider {
         System.out.println("Usuario: " + user.getName());
         System.out.println("Monto: " + amount + " " + currency);
         System.out.println("Transacción exitosa. ID de autorización: " + authId);
-        return response; // Devuelve la respuesta
+
+        try {
+            saveTransaction(response);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return response;
+    }
+
+    public void saveTransaction(Map<String,Object> transactionData) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+
+        mapper.writeValue(new File("src\\main\\java\\edu\\uptc\\software\\data\\pagos.json"), transactionData);
     }
     
 }
