@@ -2,10 +2,12 @@ package edu.uptc.software.proveedor;
 
 import java.io.File;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
-
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PaymentProvider {
@@ -28,17 +30,62 @@ public class PaymentProvider {
 
         try {
             saveTransaction(response);
+            saveTransactionData(user, authId, amount, currency);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+    
         return response;
     }
 
-    public void saveTransaction(Map<String,Object> transactionData) throws Exception {
+    public void saveTransaction(Map<String, Object> transactionData) throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
+        File file = new File("src/main/java/edu/uptc/software/data/pagos.json");
 
-        mapper.writeValue(new File("src\\main\\java\\edu\\uptc\\software\\data\\pagos.json"), transactionData);
+        List<Map<String, Object>> transactions = new ArrayList<>();
+
+        // Si el archivo ya tiene datos, leerlos
+        if (file.exists() && file.length() > 0) {
+            transactions = mapper.readValue(
+                    file,
+                    new TypeReference<List<Map<String, Object>>>() {}
+            );
+        }
+
+        // Agregar nueva transacción
+        transactions.add(transactionData);
+
+        // Guardar todo nuevamente
+        mapper.writeValue(file, transactions);
+    }
+
+    public void saveTransactionData(User user, int authId, long amount, String currency) throws Exception {
+
+        ObjectMapper mapper = new ObjectMapper();
+        File file = new File("src\\main\\java\\edu\\uptc\\software\\data\\registros.json");
+
+        Map<String, Object> transactionData = new HashMap<>();
+
+        transactionData.put("userId", user.getId());
+        transactionData.put("authId", authId);
+        transactionData.put("amount", amount);
+        transactionData.put("currency", currency);
+
+        List<Map<String, Object>> transactions = new ArrayList<>();
+        
+        // Si el archivo ya tiene datos, leerlos
+        if (file.exists() && file.length() > 0) {
+            transactions = mapper.readValue(
+                    file,
+                    new TypeReference<List<Map<String, Object>>>() {}
+            );
+        }
+
+        transactions.add(transactionData);
+
+        mapper.writeValue(file, transactions);
     }
     
 }
