@@ -4,7 +4,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Scanner;
 
+import edu.uptc.software.adaptador.ProveedorPagoAdaptador;
 import edu.uptc.software.empresa.Cliente;
+import edu.uptc.software.empresa.ServicioPago;
 import edu.uptc.software.empresa.SistemaOrdenes;
 import edu.uptc.software.proveedor.PaymentProvider;
 
@@ -15,27 +17,37 @@ public class Main {
 
     public static void main(String[] args) {
         
-        PaymentProvider provider = new PaymentProvider();
-        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(provider);
 
         Main main = new Main();
 
-        Map<String, Object> response = new HashMap<>();
+        Map<String, Object> datos = main.realizarPago();
+        Cliente cliente = (Cliente) datos.get("cliente");
+        Long monto = (Long) datos.get("monto");
+        String divisa = (String) datos.get("divisa");
 
-        response = main.realizarPago();
         
-        sistemaOrdenes.procesarOrden((Cliente) response.get("cliente"), (Long) response.get("monto"), (String) response.get("divisa"));
-        
+        PaymentProvider provider = new PaymentProvider();
+        ServicioPago adaptador = new ProveedorPagoAdaptador(provider, divisa);
+        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(adaptador);
+
+        ServicioPago.RespuestaPago respuesta = sistemaOrdenes.procesarOrden(cliente, monto);
+
+        System.out.println("\n RECIBO DE PAGO");
+        System.out.println("Cliente: " + cliente.getNombre());
+        System.out.println("Monto: " + monto + " " + divisa);
+        System.out.println("Estado: " + respuesta.getEstado());
+        System.out.println("Código Autorización: " + respuesta.getCodigoAutorizacion());
     }
 
     public Map<String, Object> realizarPago(){
-        
+        System.out.println("\n[ Registro de Transacción ]");
         Cliente cliente = registroCliente();
-
-        System.out.println("Ingrese la divisa: ");
+        System.out.println("Ingrese la divisa (ej. COP, USD): ");
         String divisa = sc.nextLine();
         System.out.println("Ingrese el monto a pagar: ");
         Long monto = sc.nextLong();
+        sc.nextLine();
+
         Map<String, Object> response = new HashMap<>();
 
         response.put("cliente", cliente);

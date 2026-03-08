@@ -23,9 +23,9 @@ public class PaymentProvider {
         response.put("authId", authId); // Agrega el ID de autorización generado
         response.put("timestamp", LocalDateTime.now().toString()); // Agrega la marca de tiempo de la transacción
 
-        System.out.println("Proveedor externo procesando pago...");
-        System.out.println("Usuario: " + user.getName());
-        System.out.println("Monto: " + amount + " " + currency);
+        System.out.println("Proveedor externo procesando pago..."); 
+        //System.out.println("Usuario: " + user.getName());
+        //System.out.println("Monto: " + amount + " " + currency);
         System.out.println("Transacción exitosa. ID de autorización: " + authId);
 
         try {

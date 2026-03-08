@@ -18,12 +18,12 @@ public class ProveedorPagoAdaptador implements ServicioPago {
 
     @Override
     public RespuestaPago procesarPago(String clienteId, long monto) {
-        User userExterno = new User(clienteId, "Nombre del Cliente");
+        User userExterno = new User(clienteId, "");
         
         Map<String, Object> respuesta = externalProvider.executeTransaction(userExterno, monto, moneda);
 
         String estado = (String) respuesta.get("status");
-        String codigoAutorizacion = (String) respuesta.get("authId");
+        String codigoAutorizacion = String.valueOf(respuesta.get("authId"));
 
 
         return new RespuestaPago(codigoAutorizacion, estado);
