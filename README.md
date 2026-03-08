@@ -15,7 +15,7 @@ Sistema básico de procesamiento de pagos en Java, donde existe un sistema princ
 
 El sistema está organizado en los siguientes paquetes:
 
-![alt text](image.png)
+![alt text](imagenes/image.png)
 
 - **empresa**  
   Contiene las clases principales del sistema, como la gestión de clientes y órdenes.
@@ -25,29 +25,105 @@ El sistema está organizado en los siguientes paquetes:
 
 - **data**  
   Archivos JSON utilizados para almacenar clientes y registros de transacciones.
-  - clientes: Guarda el id y el nombre de los clientes
-  - pago: se encarga de guardar la información que llega al proveedor, almacenando el authId, estado y la fecha con hora en la que se realizó el pagó
-  - registros se encarga de guardar el monto del pago realizado, junto con la divisa en la que se realizó el pago, asociando el id del usuario y el id automatico del proveedor, con la finalidad de tener información completa de quien realizó el pago, fecha y hora, monto, divisas y el proveedor que Id le asignó al pagó
+  - `clientes.json`: Guarda el id y el nombre de los clientes
+  - `pago.json`: se encarga de guardar la información que llega al proveedor, almacenando el authId, estado y la fecha con hora en la que se realizó el pagó
+  - `registros.json` se encarga de guardar el monto del pago realizado, junto con la divisa en la que se realizó el pago, asociando el id del usuario y el id automatico del proveedor, con la finalidad de tener información completa de quien realizó el pago, fecha y hora, monto, divisas y el proveedor que Id le asignó al pagó
 
 - **Main**  
   Punto de entrada de la aplicación.
 
 - **Diagrama simple**
-![alt text](image-1.png)
+![alt text](imagenes/image-1.png)
 
 - **Main**  
   Punto de entrada de la aplicación. Donde se reciben los datos para relizar los pagos
 
 - **SistemaOrdenes**
+  En esta clase el sistema principal de la empresa se comunica con el sistema del proveedor para procesar el pagó, ademas de eso se realiza el respectivo registro del cliente en el archivo Json (`clientes.json`)
 
 
 - **PaymentProvider** (Proveedor externo)
-    
+    En esta clase se ejecutan las transacciones y se realiza el respectivo registro de la información en los archivos Json (`pagos.json` y `registros.json`)
 
 -**registros.json**
     Aqui se guarda el registro de los pagos realizados, asociando el id del cliente, el id automático que genera el proveedor y guardando información relevante como el monto y la divisa en la que se realizó el pago
 
-Problema de acoplamiento
+-**Problema de acoplamiento**
+  Actualmente hay un alto acoplamiento, ya que la el sistema principal depende directamente de la clase `PaymentProvider` del sistema del proveedor y de la estructura de datos que utiliza el mismo para procesar transacciones, de como este maneja los datos y los registra. Por ende el sistema principal debe acoplarse a la interfaz del proveedor, la cual usa el metodo executeTransaction(`user, amount, currency`) y retorna una estructura específica con los campos `authId` y `timestamp`. 
+
+  Debido a esta dependencia directa, cualquier cambio de la interfaz del proveedor obligaría a modificar el sistema principal. 
 
 
-Evidencia de ejecución
+-**Evidencia de ejecución**
+
+Ejecución del programa
+![alt text](imagenes/image-2.png)
+
+Información guardada en clientes.json
+![alt text](imagenes/image-3.png)
+
+Información guardada en pagos.json
+![alt text](imagenes/image-4.png)
+
+Información guardada en registros.json
+![alt text](imagenes/image-5.png)
+
+
+
+# Paso 2 – Análisis de impacto del cambio
+
+## Estructura del código inicial antes del cambio
+![alt text](imagenes/image-6.png)
+
+En la implementación inicial se puede observar que el método `executeTransaction` del proveedor espera recibir los siguientes parámetros:
+
+- `user` de tipo **User**
+- `amount` (monto) de tipo **long**
+- `currency` (divisa) de tipo **String**
+
+Este método es el encargado de procesar y registrar los pagos realizados por el sistema principal.
+
+---
+
+## Estructura del código luego del cambio
+![alt text](imagenes/image-7.png)
+
+Se simuló un cambio en la interfaz del proveedor externo. Los cambios realizados fueron los siguientes:
+
+- El atributo **amount** cambió de tipo `long` a **BigDecimal**, ya que este tipo de dato permite manejar valores decimales y ofrece mayor precisión para operaciones financieras.
+
+- Se agregó una validación en el método `executeTransaction`, donde ahora el proveedor solo acepta pagos en las divisas **USD** o **EUR**, rechazando cualquier otra moneda.
+
+---
+
+## Resultado de la ejecución después del cambio
+![alt text](imagenes/image-8.png)
+
+Al ejecutar el sistema después de realizar estos cambios, se presentan errores debido a que el método `executeTransaction` ahora espera recibir parámetros de tipo:
+
+- `User`
+- `BigDecimal`
+- `String`
+
+Sin embargo, el método `procesarOrden` del sistema principal continúa enviando:
+
+- `User`
+- `long`
+- `String`
+
+Debido a esta incompatibilidad de tipos, el sistema principal deja de funcionar correctamente.
+
+---
+
+## Impacto del cambio
+
+Este escenario demuestra que el sistema principal está **fuertemente acoplado** a la interfaz del proveedor externo. 
+
+Cuando el proveedor modifica su contrato (por ejemplo, cambiando tipos de datos o restricciones de negocio), el sistema interno se ve obligado a modificar su propia implementación para poder seguir utilizando el servicio externo.
+
+En este caso, el sistema de la empresa tendría que:
+
+- Cambiar el tipo de dato `long` a `BigDecimal` en diferentes partes del sistema.
+- Adaptarse a la nueva restricción de divisas aceptadas por el proveedor.
+
+Esto demuestra que el sistema interno depende directamente de la implementación del proveedor, lo que reduce la **flexibilidad, mantenibilidad y capacidad de adaptación del sistema**.

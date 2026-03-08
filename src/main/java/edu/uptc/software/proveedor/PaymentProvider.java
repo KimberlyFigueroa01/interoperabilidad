@@ -1,41 +1,42 @@
 package edu.uptc.software.proveedor;
 
 import java.io.File;
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PaymentProvider {
     
-    public Map<String, Object> executeTransaction(User user, long amount, String currency){
+    public Map<String, Object> executeTransaction(User user, BigDecimal amount, String currency){
 
         Random random = new Random();
         int authId = random.nextInt(90000) + 10000; // Genera un número aleatorio de 5 dígitos
 
         Map<String, Object> response = new HashMap<>(); // Crea un mapa para la respuesta
 
-        response.put("status", "success"); // Agrega el estado de la transacción
-        response.put("authId", authId); // Agrega el ID de autorización generado
-        response.put("timestamp", LocalDateTime.now().toString()); // Agrega la marca de tiempo de la transacción
+        if (!currency.equalsIgnoreCase("USD") && !currency.equalsIgnoreCase("EUR")) {
+            response.put("status", "error");
+            response.put("message", "Divisa no soportada. Solo se aceptan USD y EUR.");
+            return response;
+        } else{
+            response.put("status", "success"); // Agrega el estado de la transacción
+            response.put("authId", authId); // Agrega el ID de autorización generado
+            response.put("timestamp", LocalDateTime.now().toString()); // Agrega la marca de tiempo de la transacción
 
         System.out.println("Proveedor externo procesando pago..."); 
         //System.out.println("Usuario: " + user.getName());
         //System.out.println("Monto: " + amount + " " + currency);
         System.out.println("Transacción exitosa. ID de autorización: " + authId);
 
-        try {
-            saveTransaction(response);
-            saveTransactionData(user, authId, amount, currency);
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
-    
         return response;
     }
 
@@ -61,7 +62,7 @@ public class PaymentProvider {
         mapper.writeValue(file, transactions);
     }
 
-    public void saveTransactionData(User user, int authId, long amount, String currency) throws Exception {
+    public void saveTransactionData(User user, int authId, BigDecimal amount, String currency) throws Exception {
 
         ObjectMapper mapper = new ObjectMapper();
         File file = new File("src\\main\\java\\edu\\uptc\\software\\data\\registros.json");
