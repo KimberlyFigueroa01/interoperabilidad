@@ -12,23 +12,21 @@ import com.fasterxml.jackson.core.type.TypeReference;
 
 
 public class SistemaOrdenes {
-    private PaymentProvider paymentProvider;
+    private ServicioPago servicioPago;
 
-    public SistemaOrdenes() {
+    public SistemaOrdenes(ServicioPago servicioPago) {
+        this.servicioPago = servicioPago;
     }
 
-    public SistemaOrdenes(PaymentProvider paymentProvider) {
-        this.paymentProvider = paymentProvider;
-    }
-
-    public void procesarOrden(Cliente cliente, long monto, String moneda) {
-        User user = new User(cliente.getId(), cliente.getNombre());
-        paymentProvider.executeTransaction(user, monto, moneda);
-        try{
+    public ServicioPago.RespuestaPago procesarOrden(Cliente cliente, long monto) {
+        ServicioPago.RespuestaPago respuesta = servicioPago.procesarPago(cliente.getId(), monto);
+        
+        try {
             saveTransaction(cliente);
-        }catch(Exception e){
+        } catch(Exception e) {
             e.printStackTrace();
         }
+        return respuesta;
     }
 
     public void saveTransaction(Cliente cliente) throws Exception {
