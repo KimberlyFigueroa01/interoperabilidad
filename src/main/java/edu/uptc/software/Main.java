@@ -35,7 +35,7 @@ public class Main {
         SecondPaymentProvider segundoProveedor = new SecondPaymentProvider();
         ServicioPago segundoAdaptador = new SegundoAdaptadorProveedor(segundoProveedor);
 
-        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(segundoAdaptador);
+        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(adaptador);
         ServicioPago.RespuestaPago respuesta = sistemaOrdenes.procesarOrden(cliente, monto);
 
         System.out.println("\n RECIBO DE PAGO");
