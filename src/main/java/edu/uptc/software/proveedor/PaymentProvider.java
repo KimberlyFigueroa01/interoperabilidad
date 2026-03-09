@@ -26,7 +26,7 @@ public class PaymentProvider {
             response.put("message", "Divisa no soportada. Solo se aceptan USD, EUR y COP.");
             return response;
         } else{
-            response.put("status", "success"); // Agrega el estado de la transacción
+            response.put("status", "exitoso"); // Agrega el estado de la transacción
             response.put("authId", authId); // Agrega el ID de autorización generado
             response.put("timestamp", LocalDateTime.now().toString()); // Agrega la marca de tiempo de la transacción
 

@@ -5,12 +5,12 @@ import java.util.Map;
 import java.util.Scanner;
 
 import edu.uptc.software.adaptador.ProveedorPagoAdaptador;
+import edu.uptc.software.adaptador.SegundoAdaptadorProveedor;
 import edu.uptc.software.empresa.Cliente;
 import edu.uptc.software.empresa.ServicioPago;
 import edu.uptc.software.empresa.SistemaOrdenes;
 import edu.uptc.software.proveedor.PaymentProvider;
 import edu.uptc.software.proveedor.SecondPaymentProvider;
-import edu.uptc.software.adaptador.SegundoAdaptadorProveedor;
 
 
 public class Main {
@@ -33,9 +33,9 @@ public class Main {
 
         // Segundo proveedor
         SecondPaymentProvider segundoProveedor = new SecondPaymentProvider();
-        ServicioPago segundoAdaptador = new SegundoAdaptadorProveedor(segundoProveedor);
+        ServicioPago segundoAdaptador = new SegundoAdaptadorProveedor(segundoProveedor, divisa);
 
-        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(adaptador);
+        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(segundoAdaptador);
         ServicioPago.RespuestaPago respuesta = sistemaOrdenes.procesarOrden(cliente, monto);
 
         System.out.println("\n RECIBO DE PAGO");
@@ -48,7 +48,7 @@ public class Main {
     public Map<String, Object> realizarPago(){
         System.out.println("\n[Bienvenido al Sistema de Órdenes]");
         Cliente cliente = registroCliente();
-        System.out.println("Ingrese la divisa (ej: COP, USD): ");
+        System.out.println("Ingrese la divisa (ej: COP, USD, EUR): ");
         String divisa = sc.nextLine();
         System.out.println("Ingrese el monto a pagar: ");
         Long monto = sc.nextLong();
