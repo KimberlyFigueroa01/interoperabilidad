@@ -6,7 +6,7 @@ import java.util.List;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import edu.uptc.software.proveedor.PaymentProvider;
+import edu.uptc.software.proveedor.PaymentProvider; //Cambio con respecto al punto 1
 import edu.uptc.software.proveedor.User;
 import com.fasterxml.jackson.core.type.TypeReference;
 

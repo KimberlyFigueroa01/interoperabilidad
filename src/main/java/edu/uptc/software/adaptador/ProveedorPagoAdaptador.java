@@ -1,5 +1,6 @@
 package edu.uptc.software.adaptador;
 
+import java.math.BigDecimal;
 import java.util.Map;
 
 import edu.uptc.software.empresa.ServicioPago;
@@ -20,7 +21,7 @@ public class ProveedorPagoAdaptador implements ServicioPago {
     public RespuestaPago procesarPago(String clienteId, long monto) {
         User userExterno = new User(clienteId, "Usuario del sistema");
         
-        Map<String, Object> respuesta = externalProvider.executeTransaction(userExterno, monto, moneda);
+        Map<String, Object> respuesta = externalProvider.executeTransaction(userExterno, BigDecimal.valueOf(monto), moneda);
 
         String estado = (String) respuesta.get("status");
         String codigoAutorizacion = String.valueOf(respuesta.get("authId"));

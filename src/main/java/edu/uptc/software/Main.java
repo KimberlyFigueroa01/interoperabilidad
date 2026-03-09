@@ -40,9 +40,9 @@ public class Main {
     }
 
     public Map<String, Object> realizarPago(){
-        System.out.println("\n[ Registro de Transacción ]");
+        System.out.println("\n[Bienvenido al Sistema de Órdenes]");
         Cliente cliente = registroCliente();
-        System.out.println("Ingrese la divisa (ej. COP, USD): ");
+        System.out.println("Ingrese la divisa (ej: COP, USD): ");
         String divisa = sc.nextLine();
         System.out.println("Ingrese el monto a pagar: ");
         Long monto = sc.nextLong();
