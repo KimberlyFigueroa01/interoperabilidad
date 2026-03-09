@@ -127,3 +127,5 @@ En este caso, el sistema de la empresa tendría que:
 - Adaptarse a la nueva restricción de divisas aceptadas por el proveedor.
 
 Esto demuestra que el sistema interno depende directamente de la implementación del proveedor, lo que reduce la **flexibilidad, mantenibilidad y capacidad de adaptación del sistema**.
+
+# Paso 5 – Validación mediante prueba automatizada mínima
