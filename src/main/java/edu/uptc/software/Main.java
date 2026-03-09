@@ -9,6 +9,8 @@ import edu.uptc.software.empresa.Cliente;
 import edu.uptc.software.empresa.ServicioPago;
 import edu.uptc.software.empresa.SistemaOrdenes;
 import edu.uptc.software.proveedor.PaymentProvider;
+import edu.uptc.software.proveedor.SecondPaymentProvider;
+import edu.uptc.software.adaptador.SegundoAdaptadorProveedor;
 
 
 public class Main {
@@ -25,11 +27,15 @@ public class Main {
         Long monto = (Long) datos.get("monto");
         String divisa = (String) datos.get("divisa");
 
-        
+        //Proveedor Original
         PaymentProvider provider = new PaymentProvider();
         ServicioPago adaptador = new ProveedorPagoAdaptador(provider, divisa);
-        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(adaptador);
 
+        // Segundo proveedor
+        SecondPaymentProvider segundoProveedor = new SecondPaymentProvider();
+        ServicioPago segundoAdaptador = new SegundoAdaptadorProveedor(segundoProveedor);
+
+        SistemaOrdenes sistemaOrdenes = new SistemaOrdenes(segundoAdaptador);
         ServicioPago.RespuestaPago respuesta = sistemaOrdenes.procesarOrden(cliente, monto);
 
         System.out.println("\n RECIBO DE PAGO");
