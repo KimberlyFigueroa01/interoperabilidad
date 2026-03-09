@@ -21,21 +21,23 @@ public class PaymentProvider {
 
         Map<String, Object> response = new HashMap<>(); // Crea un mapa para la respuesta
 
-        if (!currency.equalsIgnoreCase("USD") && !currency.equalsIgnoreCase("EUR")) {
+        if (!currency.equalsIgnoreCase("USD") && !currency.equalsIgnoreCase("EUR")&& !currency.equalsIgnoreCase("COP")) {
             response.put("status", "error");
-            response.put("message", "Divisa no soportada. Solo se aceptan USD y EUR.");
+            response.put("message", "Divisa no soportada. Solo se aceptan USD, EUR y COP.");
             return response;
         } else{
             response.put("status", "success"); // Agrega el estado de la transacción
             response.put("authId", authId); // Agrega el ID de autorización generado
             response.put("timestamp", LocalDateTime.now().toString()); // Agrega la marca de tiempo de la transacción
 
-            System.out.println("Proveedor externo procesando pago...");
-            System.out.println("Usuario: " + user.getName());
-            System.out.println("Monto: " + amount + " " + currency);
-            System.out.println("Transacción exitosa. ID de autorización: " + authId);
+           
 
-            try {
+        System.out.println("Proveedor externo procesando pago..."); 
+        //System.out.println("Usuario: " + user.getName());
+        //System.out.println("Monto: " + amount + " " + currency);
+        System.out.println("Transacción exitosa. ID de autorización: " + authId);
+          
+          try {
                 saveTransaction(response);
                 saveTransactionData(user, authId, amount, currency);
             } catch (Exception e) {
