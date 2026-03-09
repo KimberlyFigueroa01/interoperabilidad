@@ -14,21 +14,29 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PaymentProvider {
     
-    public Map<String, Object> executeTransaction(User user, BigDecimal amount, String currency){
+    public Map<String, Object> executeTransaction(User user, long monto, String currency){
 
         Random random = new Random();
         int authId = random.nextInt(90000) + 10000; // Genera un número aleatorio de 5 dígitos
 
         Map<String, Object> response = new HashMap<>(); // Crea un mapa para la respuesta
 
-        if (!currency.equalsIgnoreCase("USD") && !currency.equalsIgnoreCase("EUR")) {
+        if (!currency.equalsIgnoreCase("USD") && !currency.equalsIgnoreCase("EUR")&& !currency.equalsIgnoreCase("COP")) {
             response.put("status", "error");
-            response.put("message", "Divisa no soportada. Solo se aceptan USD y EUR.");
+            response.put("message", "Divisa no soportada. Solo se aceptan USD, EUR y COP.");
             return response;
         } else{
             response.put("status", "success"); // Agrega el estado de la transacción
             response.put("authId", authId); // Agrega el ID de autorización generado
             response.put("timestamp", LocalDateTime.now().toString()); // Agrega la marca de tiempo de la transacción
+
+            try {
+            saveTransaction(response);
+            saveTransactionData(user, authId, BigDecimal.valueOf(monto), currency);
+        } catch (Exception e) {
+            // Solo imprimimos si hay un error real de sistema
+            e.printStackTrace();
+        }
 
         System.out.println("Proveedor externo procesando pago..."); 
         //System.out.println("Usuario: " + user.getName());
