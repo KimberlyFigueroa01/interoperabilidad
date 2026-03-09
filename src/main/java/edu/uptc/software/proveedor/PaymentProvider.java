@@ -14,7 +14,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class PaymentProvider {
     
-    public Map<String, Object> executeTransaction(User user, long monto, String currency){
+    public Map<String, Object> executeTransaction(User user, BigDecimal amount, String currency){
 
         Random random = new Random();
         int authId = random.nextInt(90000) + 10000; // Genera un número aleatorio de 5 dígitos
@@ -30,18 +30,19 @@ public class PaymentProvider {
             response.put("authId", authId); // Agrega el ID de autorización generado
             response.put("timestamp", LocalDateTime.now().toString()); // Agrega la marca de tiempo de la transacción
 
-            try {
-            saveTransaction(response);
-            saveTransactionData(user, authId, BigDecimal.valueOf(monto), currency);
-        } catch (Exception e) {
-            // Solo imprimimos si hay un error real de sistema
-            e.printStackTrace();
-        }
+           
 
         System.out.println("Proveedor externo procesando pago..."); 
         //System.out.println("Usuario: " + user.getName());
         //System.out.println("Monto: " + amount + " " + currency);
         System.out.println("Transacción exitosa. ID de autorización: " + authId);
+          
+          try {
+                saveTransaction(response);
+                saveTransactionData(user, authId, amount, currency);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
         }
 
