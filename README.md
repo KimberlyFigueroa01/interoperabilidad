@@ -1,5 +1,39 @@
-# interoperabilidad
-Proyecto de análisis para aprender a usar el patrón Adapter
+# Interoperabilidad – Patrón Adaptador
+
+Este proyecto implementa una estrategia de interoperabilidad mediante el patrón
+Adapter para desacoplar un sistema principal de órdenes de un proveedor externo
+de pagos.
+
+El objetivo es demostrar cómo un adaptador permite mantener un contrato interno
+estable incluso cuando el proveedor externo cambia su interfaz.
+
+## Ejecución del proyecto
+
+Clonar el repositorio:
+
+git clone <URL_DEL_REPOSITORIO>
+
+Compilar el proyecto con Maven:
+
+mvn clean install
+
+Ejecutar pruebas:
+
+mvn test
+
+## Patrón de diseño utilizado
+
+Este proyecto implementa el patrón **Adapter**, cuyo objetivo es permitir que
+dos interfaces incompatibles puedan trabajar juntas.
+
+En este caso:
+
+Sistema principal → usa el contrato `PaymentGateway`
+
+Proveedor externo → tiene su propia interfaz incompatible
+
+El adaptador se encarga de traducir las llamadas del sistema principal al
+proveedor externo sin modificar el código existente.
 
 # Paso 1- Implementación ingenua (acopada)
 

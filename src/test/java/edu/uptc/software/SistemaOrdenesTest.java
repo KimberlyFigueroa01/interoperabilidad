@@ -23,7 +23,7 @@ public class SistemaOrdenesTest {
 
         ServicioPago.RespuestaPago respuesta = sistema.procesarOrden(cliente, 500000);
 
-        assertEquals("success", respuesta.getEstado());
+        assertEquals("exitoso", respuesta.getEstado());
           
 
     }
