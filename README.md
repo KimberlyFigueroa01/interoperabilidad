@@ -129,3 +129,33 @@ En este caso, el sistema de la empresa tendría que:
 Esto demuestra que el sistema interno depende directamente de la implementación del proveedor, lo que reduce la **flexibilidad, mantenibilidad y capacidad de adaptación del sistema**.
 
 # Paso 5 – Validación mediante prueba automatizada mínima
+
+En este paso se realizo una verificación mediante pruebas en la que se evidencio que el sistema de ordenes puede usar el proveedor de pagos externo a través dela adaptador, sin que el sistema depensa directamente de la implementación del proveedor
+
+La clase de prueba implementada es `SistemaOrdenesTest.java`, en esta clase se utiliza **JUnit 5** para ejecutar pruebas automatizadas sobre el sistema
+
+Flujo de la prueba:
+1. El sistema `SistemaOrdenes` solicita procesar un pago
+2. El sistema usa la interfaz ServicioPago
+3. La llamada llega al ProveedorPagoAdaptador
+4. El adaptador traduce la solicitud al PaymentProvider
+5. El proveedor externo procesa el pago
+6. El adaptador transforma la respuesta al formato interno del sistema
+
+Este flujo demuestra que el sistema puede interoperar con un proveedor externo sin modificar su lógica
+
+## Evidencia de la ejecución exitosa
+
+![alt text](imagenes/image-9.png)
+
+Para la verificación del resultado se hace uso de `assertEquals` que usa **JUnit 5** para verificar que el resultado del pagp sea exitoso. La prueba confirma que:
+- El adaptador funciona correctamente
+- El sistema puede procesar pagos usando el proveedor externo
+- La respuesta es interpretada correctamente por el sistema
+
+Si el estado que devuelve fuera diferente a "success", la prueba fallaria
+
+La ejecución del comando `mv clean install` mostro el resultado **BUILD SUCCES**. Esto significa que:
+- El proyecto compila correctamente
+- La prueba fue ejecutada sin errores
+- El flujo completo del pago funciona mediante el adaptador
