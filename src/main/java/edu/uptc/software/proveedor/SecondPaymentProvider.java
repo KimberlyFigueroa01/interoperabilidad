@@ -15,7 +15,7 @@ public class SecondPaymentProvider {
     
     public String realizarPago(double valor, String correoElectronico, long celular, User user, String currency) {
     
-    // 1. Validación de celular
+    
     if (celular < 1000000000L) {
         return "Celular inválido";
     }
@@ -23,12 +23,12 @@ public class SecondPaymentProvider {
     String nConfirmacion = "Nuevo-" + System.currentTimeMillis() + "-" + (int)(Math.random() * 100);
     Map<String, Object> response = new HashMap<>();
 
-    // 2. Tu lógica de Divisa (Mantenida en el Proveedor)
+    
     if (!currency.equalsIgnoreCase("USD") && !currency.equalsIgnoreCase("EUR") && !currency.equalsIgnoreCase("COP")) {
-        // Si no es soportada, retornamos el mensaje de error directamente
+        
         return "Divisa no soportada";
     } else {
-        // Si es soportada, armamos la respuesta exitosa y guardamos
+        
         response.put("status", "exitoso");
         response.put("authId", nConfirmacion);
         response.put("timestamp", LocalDateTime.now().toString());
