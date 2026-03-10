@@ -220,4 +220,26 @@ La ejecución del comando `mv clean install` mostro el resultado **BUILD SUCCES*
 
 
 # Paso 6 – Simulación de segundo proveedor
-En el último paso 
+En el último paso se creó un segundo proveedor donde se pedían datos adicionales como el `correo` y el `telefono` y con una lógica diferente. El propósito de esto era verificar que con la interfaz que se tenía ahora, al crear otro proveedor no se tocaría nada del código de SistemaOrdenes sino que sería algo independiente.
+
+Para manejar este `SecondPaymentProvider` se creo un nuevo adaptador que creó los nuevos datos que hasta el momento el sistema no tenía, esto para cumplir con lo que pedía el segundo proveedor.
+
+Se logró concluir que con la interfaz y los adaptadores en el `Main` el sistema pudo cambiar entre proveedores sin problemas, ejecutando lo de cada proveedor con independencia.
+
+En la siguiente imagen se muestra la implementación de los dos proveedores en el `Main`
+
+![alt text](imagenes/image-13.png)
+
+
+Evidencia de ejecución del primer proveedor:
+![alt text](imagenes/image-14.png)
+
+
+Evidencia de ejecución del segundo proveedor:
+![alt text](imagenes/image-15.png)
+
+
+
+## Arquitectura final del sistema
+![alt text](imagenes/image-16.png)
+
