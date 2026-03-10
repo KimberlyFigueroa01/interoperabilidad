@@ -128,6 +128,25 @@ En este caso, el sistema de la empresa tendría que:
 
 Esto demuestra que el sistema interno depende directamente de la implementación del proveedor, lo que reduce la **flexibilidad, mantenibilidad y capacidad de adaptación del sistema**.
 
+
+
+# Paso 3 – Definición de contrato interno estable
+
+## Estructura del sistema antes del cambio
+
+Antes de que se añadiera la interfaz de ServicioPago, la clase sistemaOrdenes y todo lo que funcionaba en ella dependía totalmente del proveedor y tenía que adaptarse a todo lo que él le pidiera. Además, si este quisiera cambiar algo o fallara en algún momento el sistema de ordenes caería también o tendría que acoplarse, es por eso que para este caso se diría que existía un acoplamiento alto.
+
+Por ejemplo en la línea `private PaymentProvider paymentProvider;` se pedía específicamente al proveedor PaymentProvider, si se quisiera usar otro proveedor no se podría porque solo se estaba aceptando ese. 
+
+El método procesarOrden solo recibía los atributos de `usuario`, `monto` y `moneda`, entonces si algún otro proveedor quisiera incluir más atributos no se podría o se tendría que modificar sistemaOrdenes y ese no es un buen punto.
+
+Código del sistema de ordenes antes del cambio:
+![alt text](imagenes/image-10.png)
+
+
+
+
+
 # Paso 5 – Validación mediante prueba automatizada mínima
 
 En este paso se realizo una verificación mediante pruebas en la que se evidencio que el sistema de ordenes puede usar el proveedor de pagos externo a través dela adaptador, sin que el sistema depensa directamente de la implementación del proveedor
