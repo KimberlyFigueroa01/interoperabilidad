@@ -146,9 +146,9 @@ Código del sistema de ordenes antes del cambio:
 
 ## Estructura del sistema después del cambio
 
-Para cambiar este problema lo que se hizo fue implementar una interfaz llamada ServicioPago del que todo el sistema iba a depender. En esta clase abstracta se creó una clase normal llamada RespuestaPago donde siempre se iba a recibir un String para código y otro String para estado, por lo que no se recibiría una respuesta que no trajera eso.
+Para cambiar este problema lo que se hizo fue implementar una interfaz llamada `ServicioPago` del que todo el sistema iba a depender. En esta clase abstracta se creó una clase normal llamada `RespuestaPago` donde siempre se iba a recibir un `String` para `código` y otro `String` para `estado`, por lo que no se recibiría una respuesta que no trajera eso.
 
-Además, el sistema solo enviaría un id y un monto usando la interfaz, esperando que con esto se le devuelva la Respuesta de Pago con la información. Esta interfaz lo que hace es obligar al proveedor a enviar la respuesta después de recibir esos parametros.
+Además, el sistema solo enviaría un `id` y un `monto` usando la interfaz, esperando que con esto se le devuelva la Respuesta de Pago con la información. Esta interfaz lo que hace es obligar al proveedor a enviar la respuesta después de recibir esos parametros.
 
 Interfaz ServicioPago:
 
@@ -168,16 +168,12 @@ El adaptador ayuda a comunicar a los proveedores con el sistema, traduciendo y t
 
 ## Traduce los parámetros internos al formato externo.
 
-Ya que como tal en el proveedor se está pidiendo un objeto usuario y tipos de datos como BigDecimal y en ele sistema se están manejando String y long 
-
-El proveedor en este caso está pidiendo 
-
 En este caso el proveedor está pidiendo un objeto `usuario` y tipos de datos diferentes como por ejemplo `BigDecimal`, lo que no se está manejando en el sistema ya que solo ofrece un `String id` y un `long monto`, por lo que es aquí donde entra el adaptador que se encarga de transformar estos datos en lo que le está pidiendo el proveedor sin necesidad de que se toque el sistema de ordenes, ya que todo se hace allí. 
 
 
 ## Convierte la respuesta externa al formato interno.
 
-Aquí el proveedor devuelve los datos en una estructura de mapa, donde hay más información. Lo que hace el adaptador es solo extraer los datos que se están pidiendo (código y estado) y los encapsula en RespuestaPago. Así no estaría recibiendo información innecesaria sino solo lo que pide.
+Aquí el proveedor devuelve los datos en una estructura de mapa, donde hay más información. Lo que hace el adaptador es solo extraer los datos que se están pidiendo (`código` y `estado`) y los encapsula en `RespuestaPago`. Así no estaría recibiendo información innecesaria sino solo lo que pide.
 
 
 ## Aísla por completo el sistema principal del proveedor.
@@ -220,3 +216,8 @@ La ejecución del comando `mv clean install` mostro el resultado **BUILD SUCCES*
 - El proyecto compila correctamente
 - La prueba fue ejecutada sin errores
 - El flujo completo del pago funciona mediante el adaptador
+
+
+
+# Paso 6 – Simulación de segundo proveedor
+En el último paso 
