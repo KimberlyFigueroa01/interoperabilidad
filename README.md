@@ -154,9 +154,6 @@ Interfaz ServicioPago:
 
 ![alt text](imagenes/image-11.png)
 
-Cambio en sistemaOrdenes:
-![alt text](imagenes/image-12.png)
-
 
 ## Impacto de la interfaz en el sistema
 
@@ -165,9 +162,30 @@ Lo que hace esta interfaz es ayudar a que no haya acoplamiento, sino que las cos
 Además, ya no se tiene que modificar la lógica del sistema de ordenes si se quiere hacer algún cambio sino que esto se hace aparte y por cada proveedor.
 
 
+# Paso 4 – Implementación del Adaptador
+
+El adaptador ayuda a comunicar a los proveedores con el sistema, traduciendo y terminando con el acoplamiento. Este realiza tres funciones:
+
+## Traduce los parámetros internos al formato externo.
+
+Ya que como tal en el proveedor se está pidiendo un objeto usuario y tipos de datos como BigDecimal y en ele sistema se están manejando String y long 
+
+El proveedor en este caso está pidiendo 
+
+En este caso el proveedor está pidiendo un objeto `usuario` y tipos de datos diferentes como por ejemplo `BigDecimal`, lo que no se está manejando en el sistema ya que solo ofrece un `String id` y un `long monto`, por lo que es aquí donde entra el adaptador que se encarga de transformar estos datos en lo que le está pidiendo el proveedor sin necesidad de que se toque el sistema de ordenes, ya que todo se hace allí. 
 
 
+## Convierte la respuesta externa al formato interno.
 
+Aquí el proveedor devuelve los datos en una estructura de mapa, donde hay más información. Lo que hace el adaptador es solo extraer los datos que se están pidiendo (código y estado) y los encapsula en RespuestaPago. Así no estaría recibiendo información innecesaria sino solo lo que pide.
+
+
+## Aísla por completo el sistema principal del proveedor.
+
+Finalmente el adaptador también aísla al proveedor del sistema. Esto lo hace por si el proveedor en algún momento cambia, ya que solo impactará en el adaptador pero el resto del sistema seguirá igual y podrá seguirse manteniendo con el tiempo.
+
+Implementación del adaptador en cógigo:
+![alt text](imagenes/image-12.png)
 
 
 
