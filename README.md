@@ -144,6 +144,29 @@ Código del sistema de ordenes antes del cambio:
 ![alt text](imagenes/image-10.png)
 
 
+## Estructura del sistema después del cambio
+
+Para cambiar este problema lo que se hizo fue implementar una interfaz llamada ServicioPago del que todo el sistema iba a depender. En esta clase abstracta se creó una clase normal llamada RespuestaPago donde siempre se iba a recibir un String para código y otro String para estado, por lo que no se recibiría una respuesta que no trajera eso.
+
+Además, el sistema solo enviaría un id y un monto usando la interfaz, esperando que con esto se le devuelva la Respuesta de Pago con la información. Esta interfaz lo que hace es obligar al proveedor a enviar la respuesta después de recibir esos parametros.
+
+Interfaz ServicioPago:
+![alt text](imagenes/image-11.png)
+
+Cambio en sistemaOrdenes:
+![alt text](imagenes/image-12.png)
+
+
+## Impacto de la interfaz en el sistema
+
+Lo que hace esta interfaz es ayudar a que no haya acoplamiento, sino que las cosas se hagan de manera independiente. Antes de añadirla el sistema tenía que adaptarse a todo lo que el proveedor quisiera, pero ahora el que se tiene que adaptar al sistema es el proveedor. 
+
+Además, ya no se tiene que modificar la lógica del sistema de ordenes si se quiere hacer algún cambio sino que esto se hace aparte y por cada proveedor.
+
+
+
+
+
 
 
 
