@@ -151,6 +151,7 @@ Para cambiar este problema lo que se hizo fue implementar una interfaz llamada S
 Además, el sistema solo enviaría un id y un monto usando la interfaz, esperando que con esto se le devuelva la Respuesta de Pago con la información. Esta interfaz lo que hace es obligar al proveedor a enviar la respuesta después de recibir esos parametros.
 
 Interfaz ServicioPago:
+
 ![alt text](imagenes/image-11.png)
 
 Cambio en sistemaOrdenes:
